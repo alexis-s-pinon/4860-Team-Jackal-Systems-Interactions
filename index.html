@@ -1,0 +1,989 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Systems Thinking — Scrollytelling</title>
+  <style>
+    /* ===== Terracotta & Sand (no gradient text) ===== */
+    :root {
+      --primary: #E8AF62;
+      /* ochre (from the image) */
+      --secondary: #687F8E;
+      /* deep slate/navy */
+      --accent: #74DBEB;
+      /* cyan highlight */
+      --quaternary: #B45309;
+      /*Home button red*/
+      --bg: #FFFBF5;
+      /* sand background */
+      --fg: #1F2937;
+      /* slate-800 text */
+      --muted: #F5EDE3;
+      /* warm muted */
+      --border: #EADAC7;
+      /* sand-stroke */
+      --shadow: 0 10px 25px rgba(124, 45, 18, .14);
+      --stickyH: 0px;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #0F0E0C;
+        --fg: #E5E7EB;
+        --muted: #1B1A17;
+        --border: #292724;
+      }
+    }
+
+    /* ===== Base ===== */
+    * {
+      box-sizing: border-box
+    }
+
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+      background: var(--bg);
+      color: var(--fg);
+      font: 16px/1.55 system-ui, -apple-system, Segoe UI, Roboto, Inter, Arial, sans-serif
+    }
+
+    img {
+      max-width: 100%;
+      display: block
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 1rem
+    }
+
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0
+    }
+
+    .visually-focusable:focus {
+      position: fixed;
+      top: 1rem;
+      left: 1rem;
+      z-index: 100;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      padding: .5rem .75rem;
+      border-radius: .5rem
+    }
+
+    /* ===== Header / Nav ===== */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: rgba(255, 251, 245, .8);
+      backdrop-filter: saturate(1.2) blur(6px);
+      border-bottom: 1px solid var(--border);
+      transition: box-shadow .2s ease
+    }
+
+    @media (prefers-color-scheme: dark) {
+      header {
+        background: rgba(15, 14, 12, .6)
+      }
+    }
+
+    header.shadow {
+      box-shadow: var(--shadow)
+    }
+
+    .nav-row {
+      height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: .5rem
+    }
+
+    .brand-mark {
+      height: 28px;
+      width: 28px;
+      border-radius: .5rem;
+      background: var(--primary)
+    }
+
+    .desktop-nav {
+      display: none;
+      gap: 1.25rem;
+      align-items: center
+    }
+
+    .desktop-nav a {
+      font-size: .95rem;
+      opacity: .9
+    }
+
+    .desktop-nav a.active {
+      font-weight: 700;
+      opacity: 1
+    }
+
+    .desktop-nav a:hover {
+      opacity: 1;
+      text-decoration: underline;
+      text-underline-offset: 3px
+    }
+
+    .mobile-toggle {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid var(--border);
+      padding: .4rem .6rem;
+      border-radius: .5rem;
+      background: transparent
+    }
+
+    .mobile-drawer {
+      display: none;
+      border-top: 1px solid var(--border);
+      padding: .75rem 0
+    }
+
+    .mobile-drawer.open {
+      display: block
+    }
+
+    @media (min-width:768px) {
+      .desktop-nav {
+        display: flex
+      }
+
+      .mobile-toggle {
+        display: none
+      }
+
+      .mobile-drawer {
+        display: none !important
+      }
+    }
+
+    /* Hide default header; CTA row will act as sticky header */
+    header {
+      display: none !important
+    }
+
+    /* ===== Scrollytelling Layout ===== */
+    .stage {
+      position: relative
+    }
+
+    .section {
+      min-height: 100vh;
+      display: block;
+      position: relative
+    }
+
+    .panel {
+      position: sticky;
+      top: var(--stickyH);
+      min-height: calc(100vh - var(--stickyH));
+      display: flex;
+      align-items: center
+    }
+
+    .panel-inner {
+      width: 100%;
+      display: grid;
+      gap: 1rem
+    }
+
+    .fadeable {
+      transition: opacity .6s ease, transform .6s ease
+    }
+
+    .is-dimmed .fadeable {
+      opacity: .2;
+      transform: translateY(4px);
+      pointer-events: none
+    }
+
+    .is-current .fadeable {
+      opacity: 1;
+      transform: none;
+      pointer-events: auto
+    }
+
+    /* Cards & UI */
+    .card {
+      border: 1px solid var(--border);
+      border-radius: 1rem;
+      padding: 1.75rem;
+      background: #fff;
+      box-shadow: none;
+      transition: box-shadow .2s ease, border-color .2s ease
+    }
+
+    .card:hover {
+      box-shadow: var(--shadow)
+    }
+
+    .row {
+      display: flex;
+      gap: .75rem;
+      align-items: flex-start;
+      margin-bottom: .75rem
+    }
+
+    .icon-box {
+      height: 48px;
+      width: 48px;
+      border-radius: .8rem;
+      background: color-mix(in oklab, var(--primary) 12%, transparent);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-right: .75rem;
+      flex: 0 0 auto
+    }
+
+    .muted {
+      opacity: .9
+    }
+
+    .three-col {
+      display: grid;
+      gap: 1.2rem
+    }
+
+    @media (min-width:768px) {
+      .three-col {
+        grid-template-columns: repeat(3, 1fr)
+      }
+    }
+
+    /* spacing md+ */
+    @media (min-width:768px) {
+      .card {
+        padding: 2rem
+      }
+    }
+
+    .eyebrow {
+      display: inline-block;
+      padding: .25rem .75rem;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: white;
+      color: var(--primary);
+      font-weight: 700;
+      font-size: .9rem;
+      margin-bottom: .5rem
+    }
+
+    .eyebrow.secondary {
+      color: var(--secondary)
+    }
+
+    .eyebrow.accent {
+      color: var(--accent)
+    }
+
+    h2 {
+      font-size: clamp(1.6rem, 1.2vw + 1.2rem, 2.25rem);
+      margin: .25rem 0 1rem 0
+    }
+
+    .section-title {
+      font-size: clamp(1.8rem, 1.4vw + 1.2rem, 2.4rem);
+      font-weight: 800;
+      margin: .25rem 0 1rem 0
+    }
+
+    .section-title.primary {
+      color: var(--primary)
+    }
+
+    .section-title.secondary {
+      color: var(--secondary)
+    }
+
+    .section-title.accent {
+      color: var(--accent)
+    }
+
+    .btn.secondary {
+      background: var(--secondary);
+      border-color: var(--secondary);
+      color: white
+    }
+
+    .btn.accent {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: white
+    }
+
+    .btn.quaternary {
+      background: #B45309;
+      border-color: #B45309;
+      color: white
+    }
+
+    /* warm copper */
+
+    /* Hero / Headline tweak (soft highlight pill) */
+    .hero {
+      background: color-mix(in oklab, var(--muted) 40%, transparent);
+      padding: 2.4rem 0 2.4rem
+    }
+
+    .hero h1 {
+      font-size: clamp(2rem, 4vw + 1rem, 3.4rem);
+      line-height: 1.1;
+      margin: 0 0 .75rem 0;
+      color: color-mix(in oklab, var(--primary) 38%, var(--fg));
+    }
+
+    .btns {
+      display: flex;
+      gap: .6rem;
+      flex-wrap: wrap;
+      margin: .6rem 0
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: .5rem;
+      padding: .7rem 1rem;
+      border-radius: .6rem;
+      border: 1px solid var(--border);
+      font-weight: 600
+    }
+
+    .btn.primary {
+      background: var(--primary);
+      border-color: var(--primary);
+      color: white
+    }
+
+    .btn.ghost {
+      background: transparent
+    }
+
+    /* Sticky CTA bar (full-width) */
+    #sticky-cta-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      opacity: 0;
+      transform: translateY(-8px);
+      pointer-events: none;
+      background: rgba(255, 251, 245, .95);
+      backdrop-filter: saturate(1.1) blur(6px);
+      border-bottom: 1px solid var(--border);
+      box-shadow: var(--shadow);
+      transition: opacity .28s ease, transform .28s ease
+    }
+
+    #sticky-cta-bar.visible {
+      opacity: 1;
+      transform: translateY(0);
+      pointer-events: auto
+    }
+
+    #sticky-cta-bar .btns {
+      display: flex;
+      gap: .55rem;
+      flex-wrap: wrap;
+      padding: .5rem 0
+    }
+
+    #sticky-cta-bar .home-link {
+      display: inline-flex
+    }
+
+    /* Footer */
+    footer {
+      border-top: 1px solid var(--border);
+      background: color-mix(in oklab, var(--muted) 40%, transparent);
+      padding: 2.5rem 0;
+      margin-top: 2rem
+    }
+
+    .footer-grid {
+      display: grid;
+      gap: 1.2rem
+    }
+
+    @media (min-width:768px) {
+      .footer-grid {
+        grid-template-columns: repeat(4, 1fr)
+      }
+    }
+
+    .small {
+      font-size: .9rem
+    }
+
+    .underline:hover {
+      text-decoration: underline;
+      text-underline-offset: 3px
+    }
+  </style>
+</head>
+
+<body>
+  <a class="sr-only visually-focusable" href="#main">Skip to content</a>
+
+  <!-- Header -->
+  <header id="site-header">
+    <div class="container nav-row">
+      <a href="#top" class="brand">
+        <div class="brand-mark"></div><strong>Systems Interactions</strong>
+      </a>
+      <nav class="desktop-nav" aria-label="Primary">
+        <a href="#concept">Understanding the Concept</a>
+        <a href="#application">Practical Application</a>
+        <a href="#framework">Explore the Framework</a>
+      </nav>
+      <button class="mobile-toggle" id="mobile-toggle" aria-expanded="false" aria-controls="mobile-drawer">☰</button>
+    </div>
+    <div class="mobile-drawer" id="mobile-drawer" role="dialog" aria-modal="true">
+      <div class="container">
+        <div style="display:grid;gap:.5rem">
+          <a href="#concept" class="underline">Understanding the Concept</a>
+          <a href="#application" class="underline">Practical Application</a>
+          <a href="#framework" class="underline">Explore the Framework</a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero (Intro) -->
+  <section id="top" class="hero">
+    <div class="container">
+      <h1>Recognize, Evaluate, and Respond to System Interactions</h1>
+      <p class="lead"><img src="img/system-thinking.gif" width="auto" height="auto" center>
+      </p>
+      <div class="btns" id="cta-row">
+        <a class="btn primary" href="#concept">Understanding the Concept</a>
+        <a class="btn secondary" href="#application">Practical Application</a>
+        <a class="btn accent" href="#framework">Explore the Framework</a>
+        <a class="btn quaternary home-link" href="#top" style="display:none">Home</a>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- Scrollytelling Stage -->
+  <main id="main" class="stage">
+    <!-- Concept Section -->
+    <section id="concept" class="section is-current"><br>
+      <div class="panel">
+        <div class="container panel-inner fadeable">
+          <div style="text-align:center;margin:16px 0">
+            <h2 class="section-title primary">Understanding the Concept</h2>
+          </div>
+
+          <!-- Definition -->
+          <article class="card">
+            <div class="row">
+              <!--div class="icon-box">📖</div-->
+              <h3 style="margin:.25rem 0 0 0">Definition</h3>
+            </div>
+            <div class="muted">
+              <p>System Interactions in Project Management refers to the principle of recognizing that all project components are connected. Effective project managers 
+                must identify these dependencies to anticipate how changes in one area will impact others, and proactively manage effects to maintain the project's 
+                integrity.</p>
+              <p>Projects sit inside larger ecosystems that includes teams, organizations, markets, and regulations. Internal choices such as scope, resources, and 
+                processes interact with external forces like users, partners, and policies. The goal is to understand these interactions and steer toward desired outcomes.</p>
+            </div>
+          </article>
+
+          <!-- Interview -->
+          <article class="card" style="margin-top:1rem;background:color-mix(in oklab, var(--muted) 40%, white)">
+            <div class="row">
+              <!--div class="icon-box" style="background:var(--secondary);color:white">👥</div-->
+              <div>
+                <h3 style="margin:.25rem 0 0 0">Interview with Professional</h3>
+                <p class="small muted">[Professional Name &amp; Title]</p>
+              </div>
+            </div>
+            <blockquote style="border-left:4px solid var(--accent);padding-left:1rem;margin:1rem 0">
+              <p><em>“[Quote 1 - Main insight from the professional about systems thinking]”</em></p>
+              <p><em>“[Quote 2 - Additional perspective or practical advice]”</em></p>
+            </blockquote>
+            <p class="small muted">[Brief bio or credentials]</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- Application Section -->
+    <section id="application" class="section is-dimmed"><br>
+      <div class="panel">
+        <div class="container panel-inner fadeable">
+          <div style="text-align:center;margin:16px 0">
+            <h2 class="section-title secondary">Practical Application</h2>
+          </div>
+
+          <article class="card">
+            <div class="row">
+              <!--div class="icon-box" style="background:color-mix(in oklab, var(--accent) 12%, transparent)">💡</div-->
+              <h3 style="margin:.25rem 0 0 0"><a href="https://openlearning.mit.edu/news/seven-innovators-who-used-systems-thinking-bring-big-ideas-life">Real-World Example: Dyson and the Dual-Cyclone Vacuum</a></h3>
+            </div>
+            <div style="display:grid;gap:1.25rem">
+              <div>
+                <h4 style="margin:.25rem 0">Context</h4>
+                <p class="muted" style="margin-left: 2rem;">Sir James Dyson used systems thinking to bring innovative ideas to life. He has created machines like the bagless vacuum, bladeless fan, and high-speed hand dryers through his questioning of what are the limitations and opportunities of standard applicances.</p>
+              </div>
+              <div>
+                <h4 style="margin:.25rem 0">System Interactions</h4>
+                <div class="three-col">
+                  <div class="card" style="padding:1rem;background:color-mix(in oklab, var(--secondary) 10%, white)">
+                    <p style="color:var(--quaternary);font-weight:700;margin:.25rem 0">Internal Factors</p>
+                    <p class="small muted">He began by looking at what kinds of vacuums were available and how they worked. This primarily consisted of his own negative experience with losing suction when using traditional vacuums.</p>
+                  </div>
+                  <div class="card" style="padding:1rem;background:color-mix(in oklab, var(--secondary) 10%, white)">
+                    <p style="color:var(--accent);font-weight:700;margin:.25rem 0">External Factors</p>
+                    <p class="small muted">He then looked for inspiration in areas that he was familiar with. His main source of inspiration was aerodynamics, where he said "small changes can lead to large nonlinear effects".</p>
+                  </div>
+                  <div class="card" style="padding:1rem;background:color-mix(in oklab, var(--secondary) 10%, white)">
+                    <p style="color:var(--primary);font-weight:700;margin:.25rem 0">Interactions</p>
+                    <p class="small muted">By relying on systems thinking, Dyson was able to expand beyond traditional designs and reimagine how air could be moved.</p>
+                  </div>
+                </div>
+              </div>
+              <div>
+                <h4 style="margin:.25rem 0">Outcome</h4>
+                <p class="muted" style="margin-left: 2rem;">The result of Dyson’s systems thinking was a quick rise to being a leader in innovative appliances, like the Dual-Cyclone vacuum. <br>In addition to this, Dyson has become a household name and gains billions of dollars in revenue each year from the companies wide variety of innovative products.</p>
+                <center><a href=https://www.intelligencenode.com/blog/dyson-ai-dtc-success-story-on-digital-channels/><img src="img/dyson-products.jpg" width="600px" height=auto></a></center>
+              </div>
+            </div>
+          </article>
+
+          <article class="card" style="margin-top:1rem;background:color-mix(in oklab, var(--muted) 35%, white)">
+            <div class="row">
+              <!--div class="icon-box">🗎</div-->
+              <h3 style="margin:.25rem 0 0 0"><a href="https://www.pmi.org/business-solutions/case-studies/reconnecting-roads-after-massive-flooding">Case Study: Reconnecting Roads After Massive Flooding</a></h3>
+            </div>
+            <div style="display:grid;gap:1.25rem">
+              <div>
+                <div class="row">
+                  <div class="icon-box"
+                    style="height:32px;width:32px;border-radius:999px;background:color-mix(in oklab, var(--secondary) 18%, transparent);color:var(--secondary);font-weight:800;justify-content:center">
+                    1</div>
+                  <h4 style="margin:.25rem 0">The Problem</h4>
+                </div>
+                <p class="muted" style="padding-left:2.25rem">A unique weather event called an atmospheric river flowed across the province of British Columbia, Canada leaving 
+                  destruction in its wake. Towns were cut off; travelers were stranded and unable to get home; a struggling supply chain was further crippled due to no commercial
+                   traffic. The Ministry of Transportation and Infrastructure decided Highway 5 was the critical linkage between the interior and commercial traffic.</p>
+              </div>
+              <div>
+                <div class="row">
+                  <div class="icon-box"
+                    style="height:32px;width:32px;border-radius:999px;background:color-mix(in oklab, var(--secondary) 18%, transparent);color:var(--secondary);font-weight:800;justify-content:center">
+                    2</div>
+                  <h4 style="margin:.25rem 0">The Approach</h4>
+                </div>
+                <div style="padding-left:2.25rem">
+                  <p class="muted">They used PMI project life cycle based on the PMBOK Guide as the foundation, but customized it to meet the unique needs of their projects and 
+                    repairs.  Ultimately, they came to the same conclusion that “the Coquihalla is a project” and “looking at each cleanup or washout as one part of the whole 
+                    project” they were able to unify in their goal. Schimpf, Weicker, and their team remained flexible and adaptable to situations that continued impacting their 
+                    efforts (i.e. snow, atmospheric river, thickness of asphalt that was being put down).</p>
+                </div>
+              </div>
+              <div>
+                <div class="row">
+                  <div class="icon-box"
+                    style="height:32px;width:32px;border-radius:999px;background:color-mix(in oklab, var(--secondary) 18%, transparent);color:var(--secondary);font-weight:800;justify-content:center">
+                    3</div>
+                  <h4 style="margin:.25rem 0">The Outcome</h4>
+                </div>
+                <div style="padding-left:2.25rem;display:grid;gap:1rem">
+                  <p class="muted">Thanks to Schimpf's project management focus and Weicker's engineering background, together they were able to stay on site and face 
+                    problems that arose head on. The highway 5 team had more than 300 people working 24 hours a day including stakeholders such as government parties, 
+                    vendors, and suppliers who came together to complete the project in the 5-week deadline, strengthening the existing relationships within the construction 
+                    industry.</p>
+                  <div class="three-col"style="justify-items:center; max-width:760px; margin:0 auto;">
+                    <div class="stat">
+                      <div style="font-weight:800;font-size:1.6rem;color:var(--quaternary)">300 people </div>
+                      <div class="small muted">and 200 pieces of equipment<br>plus 24-hour a-day work</div>
+                    </div>
+                    <div class="stat">
+                      <div style="font-weight:800;font-size:1.6rem;color:var(--accent)">35 days</div>
+                      <div class="small muted">to complete the project</div>
+                    </div>
+                    <div class="stat">
+                      <div style="font-weight:800;font-size:1.6rem;color:var(--primary)">0 safety incidents</div>
+                      <div class="small muted">despite unfavorable weather conditions</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div>
+                <div class="row">
+                  <div class="icon-box"
+                    style="height:32px;width:32px;border-radius:999px;background:color-mix(in oklab, var(--secondary) 18%, transparent);color:var(--secondary);font-weight:800;justify-content:center">
+                    4</div>
+                  <h4 style="margin:.25rem 0">Lessons Learned</h4>
+                </div>
+                <div style="padding-left:2.25rem">
+                  <p class="muted">Team Highway 5 was able to recognize, evaluate, and respond to the changing conditions inside and outside the project, responding 
+                    comprehensively to enhance their performance in repairing the vital highway. They realized the highway was the cornerstone of their project and worked as a 
+                    team to make sure the project was completed on schedule.</p>
+                </div>
+              </div>
+              <div class="card" style="padding:1rem;background:color-mix(in oklab, var(--muted) 55%, white)">
+                <p style="text-align:center;font-weight:700"><strong>Key Takeaway</strong><br>They realized that fixing the highway was just one piece of the entire system 
+                  that would open up the <br>Port of Vancouver so that business could continue moving along as normal.</p>
+              </div>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- Framework Section -->
+    <section id="framework" class="section is-dimmed"><br>
+      <div class="panel">
+        <div class="container panel-inner fadeable">
+          <div style="text-align:center;margin:16px 0">
+            <h2 class="section-title accent">Explore the Framework</h2>
+          </div>
+
+          <!--div role="tablist" aria-label="Framework views"
+            style="display:flex;gap:.5rem;flex-wrap:wrap;justify-content:center;margin-bottom:1.25rem">
+            <button class="tab" role="tab" aria-selected="true" data-tab="overview"
+              style="padding:.6rem .9rem;border:1px solid var(--border);border-radius:.6rem;background:var(--primary);color:white">Overview</button>
+            <button class="tab" role="tab" aria-selected="false" data-tab="internal"
+              style="padding:.6rem .9rem;border:1px solid var(--border);border-radius:.6rem;background:transparent">Internal
+              Factors</button>
+            <button class="tab" role="tab" aria-selected="false" data-tab="external"
+              style="padding:.6rem .9rem;border:1px solid var(--border);border-radius:.6rem;background:transparent">External
+              Factors</button>
+            <button class="tab" role="tab" aria-selected="false" data-tab="interactions"
+              style="padding:.6rem .9rem;border:1px solid var(--border);border-radius:.6rem;background:transparent">Interactions</button>
+          </div-->
+
+          <section id="view-overview" class="card" role="tabpanel" aria-labelledby="tab-overview">
+            <div style="display:grid;gap:1rem;place-items:center;max-width:800px;margin:0 auto">
+              <div
+                style="height:80px;width:80px;border-radius:999px;background:var(--primary);display:grid;place-items:center;color:white;font-size:2rem">
+                👁</div>
+              <h3>Systems Overview</h3>
+              <p class="muted">[High-level explanation of your visual representation - what it shows, why it matters]
+              </p>
+              <div
+                style="border:2px dashed var(--border);border-radius:1rem;display:grid;place-items:center;min-height:240px;background:color-mix(in oklab, var(--muted) 70%, transparent)">
+                [Your diagram, chart, or visual goes here]</div>
+            </div>
+          </section>
+
+          <section id="view-internal" class="three-col" role="tabpanel" hidden>
+            <article class="card">
+              <h4>Internal Factor 1</h4>
+              <p class="muted">[Description]</p>
+            </article>
+            <article class="card">
+              <h4>Internal Factor 2</h4>
+              <p class="muted">[Description]</p>
+            </article>
+            <article class="card">
+              <h4>Internal Factor 3</h4>
+              <p class="muted">[Description]</p>
+            </article>
+          </section>
+
+          <section id="view-external" class="three-col" role="tabpanel" hidden>
+            <article class="card">
+              <h4>External Factor 1</h4>
+              <p class="muted">[Description]</p>
+            </article>
+            <article class="card">
+              <h4>External Factor 2</h4>
+              <p class="muted">[Description]</p>
+            </article>
+            <article class="card">
+              <h4>External Factor 3</h4>
+              <p class="muted">[Description]</p>
+            </article>
+          </section>
+
+          <section id="view-interactions" class="card" role="tabpanel" hidden>
+            <div style="display:grid;gap:1rem">
+              <div class="card" style="background:color-mix(in oklab, var(--accent) 12%, white)">
+                <h4 style="color:var(--accent)">Interaction Pattern 1</h4>
+                <p class="muted">[Explain how certain elements influence each other]</p>
+              </div>
+              <div class="card" style="background:color-mix(in oklab, var(--primary) 12%, white)">
+                <h4 style="color:var(--primary)">Interaction Pattern 2</h4>
+                <p class="muted">[Explain another key interaction or feedback loop]</p>
+              </div>
+              <div class="card" style="background:color-mix(in oklab, var(--secondary) 12%, white)">
+                <h4 style="color:var(--secondary)">Interaction Pattern 3</h4>
+                <p class="muted">[Explain a third interaction or emergent behavior]</p>
+              </div>
+            </div>
+          </section>
+
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container">
+      <div class="footer-grid">
+        <div>
+          <h3 style="margin:.25rem 0;color:var(--primary)">Systems Thinking</h3>
+          <p class="small muted">Understanding how internal and external factors interact to shape outcomes.</p>
+        </div>
+        <nav class="small" aria-label="Footer"><br><br>
+          <a class="underline" href="#concept">Understanding the Concept</a><br />
+          <a class="underline" href="#application">Practical Application</a><br />
+          <a class="underline" href="#framework">Explore the Framework</a>
+        </nav>
+        <div class="small muted">
+          <p><!--span id="year"></span--><br>Ryan Hwang<br>Alejandro Diaz<br>Jeremy Yan<br>Juan Talome<br>Alexis Pinon
+          </p>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Year
+    //document.getElementById('year').textContent = new Date().getFullYear();
+
+    // Header shadow disabled; using sticky CTA instead
+    const header = document.getElementById('site-header');
+    const onScrollShadow = () => { if (window.scrollY > 8) header.classList.add('shadow'); else header.classList.remove('shadow'); };
+    onScrollShadow(); window.addEventListener('scroll', onScrollShadow);
+
+    // Mobile drawer
+    const toggle = document.getElementById('mobile-toggle');
+    const drawer = document.getElementById('mobile-drawer');
+    toggle?.addEventListener('click', () => { const open = drawer.classList.toggle('open'); toggle.setAttribute('aria-expanded', String(open)); });
+    drawer?.querySelectorAll('a').forEach(a => a.addEventListener('click', () => { drawer.classList.remove('open'); toggle.setAttribute('aria-expanded', 'false'); }));
+
+
+
+
+    // Sticky CTA bar (full-width) logic
+    const ctaRow = document.getElementById('cta-row');
+    let stickyBar = document.getElementById('sticky-cta-bar');
+    if (!stickyBar) {
+      stickyBar = document.createElement('div');
+      stickyBar.id = 'sticky-cta-bar';
+      const inner = document.createElement('div');
+      inner.className = 'container';
+      const btns = document.createElement('div');
+      btns.className = 'btns';
+
+      // Collect clones, then insert home after the accent (blue) button
+      const clones = [];
+      let homeClone = null;
+      let accentClone = null;
+      if (ctaRow) {
+        ctaRow.querySelectorAll('a').forEach((a) => {
+          const b = a.cloneNode(true);
+          b.style.display = ''; // remove inline display style if any
+          if (b.classList.contains('home-link')) {
+            b.textContent = 'Home';   // rename per request
+            homeClone = b;
+            return; // don't push yet; we'll insert after accent
+          }
+          if (b.classList.contains('accent')) accentClone = b;
+          clones.push(b);
+        });
+      }
+      // If we found both, insert home after accent; otherwise append at end
+      if (homeClone) {
+        if (accentClone) {
+          const out = [];
+          for (const c of clones) {
+            out.push(c);
+            if (c === accentClone) out.push(homeClone);
+          }
+          out.forEach(el => btns.appendChild(el));
+        } else {
+          clones.forEach(el => btns.appendChild(el));
+          btns.appendChild(homeClone);
+        }
+      } else {
+        clones.forEach(el => btns.appendChild(el));
+      }
+
+      inner.appendChild(btns);
+      stickyBar.appendChild(inner);
+      document.body.appendChild(stickyBar);
+    }
+
+    function updateStickyBar() {
+      if (!ctaRow) return;
+      const stuck = ctaRow.getBoundingClientRect().top <= 0;
+      if (stuck) {
+        stickyBar.classList.add('visible');
+      } else {
+        stickyBar.classList.remove('visible');
+      }
+      const h = stickyBar.classList.contains('visible') ? stickyBar.offsetHeight : 0;
+      document.documentElement.style.setProperty('--stickyH', h + 'px');
+    }
+    updateStickyBar();
+    window.addEventListener('scroll', updateStickyBar, { passive: true });
+    window.addEventListener('resize', updateStickyBar);
+
+    // Tabs in Framework
+
+
+    const tabs = document.querySelectorAll('.tab');
+    const panels = {
+      overview: document.getElementById('view-overview'),
+      internal: document.getElementById('view-internal'),
+      external: document.getElementById('view-external'),
+      interactions: document.getElementById('view-interactions'),
+    };
+    tabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        tabs.forEach(t => { t.setAttribute('aria-selected', 'false'); t.style.background = 'transparent'; t.style.color = ''; });
+        Object.values(panels).forEach(p => p.hidden = true);
+        tab.setAttribute('aria-selected', 'true');
+        tab.style.background = 'var(--primary)'; tab.style.color = 'white';
+        const key = tab.dataset.tab;
+        if (key && panels[key]) panels[key].hidden = false;
+      });
+    });
+
+    // ===== Scrollytelling fade logic (distance-to-header) =====
+    const sections = Array.from(document.querySelectorAll('.section'));
+    const switchOffset = 140; // px — increase to switch later, decrease to switch sooner
+    function updateCurrentSection() {
+      const stickyH = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--stickyH')) || 0;
+      let best = null;
+      let bestDist = Infinity;
+      sections.forEach(s => {
+        const rect = s.getBoundingClientRect();
+        const dist = Math.abs(rect.top - stickyH);
+        if (dist < bestDist) { bestDist = dist; best = s; }
+      });
+      // Gate the switch: only allow a new section to become current
+      // once its top is within `switchOffset` px of the sticky bar.
+      const current = document.querySelector('.section.is-current') || sections[0];
+      if (best) {
+        const candidateTop = best.getBoundingClientRect().top - stickyH;
+        if (candidateTop > switchOffset) {
+          best = current; // keep the current section until we get closer
+        }
+      }
+
+      sections.forEach(s => {
+        if (s === best) {
+          s.classList.add('is-current');
+          s.classList.remove('is-dimmed');
+        } else {
+          s.classList.remove('is-current');
+          s.classList.add('is-dimmed');
+        }
+      });
+    }
+    // run on load and on scroll
+    updateCurrentSection();
+    window.addEventListener('scroll', updateCurrentSection, { passive: true });
+    window.addEventListener('resize', updateCurrentSection);
+
+  </script>
+<script>
+  (function () {
+    const anchorGap = 16; // space under the sticky bar; tweak to taste
+
+    function readStickyH() {
+      const cssVar = parseInt(getComputedStyle(document.documentElement)
+                        .getPropertyValue('--stickyH')) || 0;
+      const stickyBar = document.getElementById('sticky-cta-bar');
+      return Math.max(cssVar, stickyBar ? stickyBar.offsetHeight : 0);
+    }
+
+    // Wait until scrolling is "idle" (no movement) before snapping
+    function waitForScrollIdle(cb, maxWait = 900) {
+      let lastY = window.scrollY;
+      let stillFrames = 0;
+      const start = performance.now();
+
+      function tick() {
+        const y = window.scrollY;
+        if (Math.abs(y - lastY) < 0.5) {
+          stillFrames++;
+        } else {
+          stillFrames = 0;
+        }
+        lastY = y;
+
+        const timedOut = performance.now() - start > maxWait;
+        if (stillFrames >= 6 || timedOut) {
+          cb();
+        } else {
+          requestAnimationFrame(tick);
+        }
+      }
+      requestAnimationFrame(tick);
+    }
+
+    document.addEventListener('click', function (e) {
+      const a = e.target.closest('a[href^="#"]');
+      if (!a) return;
+
+      const id = a.getAttribute('href').slice(1);
+      if (!id) return;
+
+      const target = document.getElementById(id);
+      if (!target) return;
+
+      e.preventDefault();
+
+      // 1) Smooth scroll using current sticky height
+      const stickyH0 = readStickyH();
+      const y0 = target.getBoundingClientRect().top + window.scrollY - stickyH0 - anchorGap;
+      window.scrollTo({ top: Math.max(0, y0), behavior: 'smooth' });
+
+      // 2) After scroll settles, snap once if needed
+      waitForScrollIdle(() => {
+        const stickyH = readStickyH();
+        const delta = target.getBoundingClientRect().top - stickyH - anchorGap;
+        if (Math.abs(delta) > 1) {
+          // Single micro-correction; 'auto' prevents canceling any ongoing smooth animation
+          window.scrollBy({ top: delta, left: 0, behavior: 'auto' });
+        }
+      });
+    });
+  })();
+</script>
+
+</body>
+
+</html>
