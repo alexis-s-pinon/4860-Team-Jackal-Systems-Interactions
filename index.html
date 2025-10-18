@@ -4,6 +4,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="color-scheme" content="light">
   <title>Systems Interactions</title>
   <link rel="icon" type="image/x-icon" href="img/favicon.ico">
   <style>
@@ -453,6 +454,35 @@
       text-decoration: underline;
       text-underline-offset: 3px
     }
+
+    /* ===== Force LIGHT mode regardless of OS setting ===== */
+    :root {
+      color-scheme: light;
+    }
+
+    /* UA widgets use light styling */
+
+    @media (prefers-color-scheme: dark) {
+
+      /* Put your LIGHT values back during dark mode */
+      :root {
+        --bg: #FFFBF5;
+        --fg: #1F2937;
+        --muted: #F5EDE3;
+        --border: #EADAC7;
+        /* keep your brand colors as-is (e.g., --primary/--accent/etc.) */
+      }
+
+      /* If your header was overridden in dark mode, reset it */
+      header {
+        background: rgba(255, 251, 245, .8) !important;
+      }
+
+      body {
+        background: var(--bg);
+        color: var(--fg);
+      }
+    }
   </style>
 </head>
 
@@ -487,7 +517,9 @@
   <section id="top" class="hero">
     <div class="container">
       <h1>Recognize, Evaluate, and Respond to System Interactions</h1>
-      <center><p class="lead"><img src="img/system-thinking.gif" width="1440px" height="auto" center></center>
+      <center>
+        <p class="lead"><img src="img/system-thinking.gif" width="1440px" height="auto" center>
+      </center>
       </p>
       <div class="btns" id="cta-row">
         <a class="btn primary" href="#concept">Understanding the Concept</a>
@@ -498,18 +530,19 @@
       </div>
     </div>
     <br>
-          <!-- PMI Definition -->
-           <div class="container" style="margin-top:1rem">
-          <article class="card">
-            <div class="row">
-              <h3 style="margin:.25rem 0 0 0">PMI Principle: Recognize, evaluate, and respond to system interactions</h3>
-            </div>
-            <div class="muted">
-              <p>Acknowledge that projects are part of larger systems and are influenced by both internal and external factors. Constantly evaluate how project elements 
-                interact with each other and with external systems to optimize performance.</p>
-            </div>
-          </article>
-          </div><br>
+    <!-- PMI Definition -->
+    <div class="container" style="margin-top:1rem">
+      <article class="card">
+        <div class="row">
+          <h3 style="margin:.25rem 0 0 0">PMI Principle: Recognize, evaluate, and respond to system interactions</h3>
+        </div>
+        <div class="muted">
+          <p>Acknowledge that projects are part of larger systems and are influenced by both internal and external
+            factors. Constantly evaluate how project elements
+            interact with each other and with external systems to optimize performance.</p>
+        </div>
+      </article>
+    </div><br>
   </section>
 
   <!-- Scrollytelling Stage -->
@@ -531,11 +564,15 @@
               <h3 style="margin:.25rem 0 0 0">Definition</h3>
             </div>
             <div class="muted">
-              <p>System Interactions in Project Management refers to the principle of recognizing that all project components are connected. Effective project managers 
-                must identify these dependencies to anticipate how changes in one area will impact others, and proactively manage effects to maintain the project's 
+              <p>System Interactions in Project Management refers to the principle of recognizing that all project
+                components are connected. Effective project managers
+                must identify these dependencies to anticipate how changes in one area will impact others, and
+                proactively manage effects to maintain the project's
                 integrity.</p>
-              <p>Projects sit inside larger ecosystems that includes teams, organizations, markets, and regulations. Internal choices such as scope, resources, and 
-                processes interact with external forces like users, partners, and policies. The goal is to understand these interactions and steer toward desired outcomes.</p>
+              <p>Projects sit inside larger ecosystems that includes teams, organizations, markets, and regulations.
+                Internal choices such as scope, resources, and
+                processes interact with external forces like users, partners, and policies. The goal is to understand
+                these interactions and steer toward desired outcomes.</p>
             </div>
           </article>
 
@@ -569,34 +606,49 @@
           <article class="card">
             <div class="row">
               <!--div class="icon-box" style="background:color-mix(in oklab, var(--accent) 12%, transparent)">💡</div-->
-              <h3 style="margin:.25rem 0 0 0"><a href="https://openlearning.mit.edu/news/seven-innovators-who-used-systems-thinking-bring-big-ideas-life">Real-World Example: Dyson and the Dual-Cyclone Vacuum</a></h3>
+              <h3 style="margin:.25rem 0 0 0"><a
+                  href="https://openlearning.mit.edu/news/seven-innovators-who-used-systems-thinking-bring-big-ideas-life">Real-World
+                  Example: Dyson and the Dual-Cyclone Vacuum</a></h3>
             </div>
             <div style="display:grid;gap:1.25rem">
               <div>
                 <h4 style="margin:.25rem 0">Context</h4>
-                <p class="muted" style="margin-left: 2rem;">Sir James Dyson used systems thinking to bring innovative ideas to life. He has created machines like the bagless vacuum, bladeless fan, and high-speed hand dryers through his questioning of what are the limitations and opportunities of standard applicances.</p>
+                <p class="muted" style="margin-left: 2rem;">Sir James Dyson used systems thinking to bring innovative
+                  ideas to life. He has created machines like the bagless vacuum, bladeless fan, and high-speed hand
+                  dryers through his questioning of what are the limitations and opportunities of standard applicances.
+                </p>
               </div>
               <div>
                 <h4 style="margin:.25rem 0">System Interactions</h4>
                 <div class="three-col">
                   <div class="card" style="padding:1rem;background:color-mix(in oklab, var(--secondary) 10%, white)">
                     <p style="color:var(--quaternary);font-weight:700;margin:.25rem 0">Internal Factors</p>
-                    <p class="small muted">He began by looking at what kinds of vacuums were available and how they worked. This primarily consisted of his own negative experience with losing suction when using traditional vacuums.</p>
+                    <p class="small muted">He began by looking at what kinds of vacuums were available and how they
+                      worked. This primarily consisted of his own negative experience with losing suction when using
+                      traditional vacuums.</p>
                   </div>
                   <div class="card" style="padding:1rem;background:color-mix(in oklab, var(--secondary) 10%, white)">
                     <p style="color:var(--accent);font-weight:700;margin:.25rem 0">External Factors</p>
-                    <p class="small muted">He then looked for inspiration in areas that he was familiar with. His main source of inspiration was aerodynamics, where he said "small changes can lead to large nonlinear effects".</p>
+                    <p class="small muted">He then looked for inspiration in areas that he was familiar with. His main
+                      source of inspiration was aerodynamics, where he said "small changes can lead to large nonlinear
+                      effects".</p>
                   </div>
                   <div class="card" style="padding:1rem;background:color-mix(in oklab, var(--secondary) 10%, white)">
                     <p style="color:var(--primary);font-weight:700;margin:.25rem 0">Interactions</p>
-                    <p class="small muted">By relying on systems thinking, Dyson was able to expand beyond traditional designs and reimagine how air could be moved.</p>
+                    <p class="small muted">By relying on systems thinking, Dyson was able to expand beyond traditional
+                      designs and reimagine how air could be moved.</p>
                   </div>
                 </div>
               </div>
               <div>
                 <h4 style="margin:.25rem 0">Outcome</h4>
-                <p class="muted" style="margin-left: 2rem;">The result of Dyson’s systems thinking was a quick rise to being a leader in innovative appliances, with technology like the Dual-Cyclone vacuum. <br>Additionally, Dyson has become a household name and gains billions of dollars in revenue each year from the company's wide variety of innovative products.</p>
-                <center><a href=https://www.intelligencenode.com/blog/dyson-ai-dtc-success-story-on-digital-channels/><img src="img/dyson-products.jpg" width="600px" height=auto></a></center>
+                <p class="muted" style="margin-left: 2rem;">The result of Dyson’s systems thinking was a quick rise to
+                  being a leader in innovative appliances, with technology like the Dual-Cyclone vacuum.
+                  <br>Additionally, Dyson has become a household name and gains billions of dollars in revenue each year
+                  from the company's wide variety of innovative products.</p>
+                <center><a
+                    href=https://www.intelligencenode.com/blog/dyson-ai-dtc-success-story-on-digital-channels /><img
+                    src="img/dyson-products.jpg" width="600px" height=auto></a></center>
               </div>
             </div>
           </article>
@@ -604,7 +656,9 @@
           <article class="card" style="margin-top:1rem;background:color-mix(in oklab, var(--muted) 35%, white)">
             <div class="row">
               <!--div class="icon-box">🗎</div-->
-              <h3 style="margin:.25rem 0 0 0"><a href="https://www.pmi.org/business-solutions/case-studies/reconnecting-roads-after-massive-flooding">Case Study: Reconnecting Roads After Massive Flooding</a></h3>
+              <h3 style="margin:.25rem 0 0 0"><a
+                  href="https://www.pmi.org/business-solutions/case-studies/reconnecting-roads-after-massive-flooding">Case
+                  Study: Reconnecting Roads After Massive Flooding</a></h3>
             </div>
             <div style="display:grid;gap:1.25rem">
               <div>
@@ -614,9 +668,12 @@
                     1</div>
                   <h4 style="margin:.25rem 0">The Problem</h4>
                 </div>
-                <p class="muted" style="padding-left:2.25rem">A unique weather event called an atmospheric river flowed across the province of British Columbia, Canada leaving 
-                  destruction in its wake. Towns were cut off; travelers were stranded and unable to get home; a struggling supply chain was further crippled due to no commercial
-                   traffic. The Ministry of Transportation and Infrastructure decided Highway 5 was the critical linkage between the interior and commercial traffic.</p>
+                <p class="muted" style="padding-left:2.25rem">A unique weather event called an atmospheric river flowed
+                  across the province of British Columbia, Canada leaving
+                  destruction in its wake. Towns were cut off; travelers were stranded and unable to get home; a
+                  struggling supply chain was further crippled due to no commercial
+                  traffic. The Ministry of Transportation and Infrastructure decided Highway 5 was the critical linkage
+                  between the interior and commercial traffic.</p>
               </div>
               <div>
                 <div class="row">
@@ -626,9 +683,12 @@
                   <h4 style="margin:.25rem 0">The Approach</h4>
                 </div>
                 <div style="padding-left:2.25rem">
-                  <p class="muted">They used PMI project life cycle based on the PMBOK Guide as the foundation, but customized it to meet the unique needs of their projects and 
-                    repairs.  Ultimately, they came to the same conclusion that “the Coquihalla is a project” and “looking at each cleanup or washout as one part of the whole 
-                    project” they were able to unify in their goal. Schimpf, Weicker, and their team remained flexible and adaptable to situations that continued impacting their 
+                  <p class="muted">They used PMI project life cycle based on the PMBOK Guide as the foundation, but
+                    customized it to meet the unique needs of their projects and
+                    repairs. Ultimately, they came to the same conclusion that “the Coquihalla is a project” and
+                    “looking at each cleanup or washout as one part of the whole
+                    project” they were able to unify in their goal. Schimpf, Weicker, and their team remained flexible
+                    and adaptable to situations that continued impacting their
                     efforts (i.e. snow, atmospheric river, thickness of asphalt that was being put down).</p>
                 </div>
               </div>
@@ -640,11 +700,14 @@
                   <h4 style="margin:.25rem 0">The Outcome</h4>
                 </div>
                 <div style="padding-left:2.25rem;display:grid;gap:1rem">
-                  <p class="muted">Thanks to Schimpf's project management focus and Weicker's engineering background, together they were able to stay on site and face 
-                    problems that arose head on. The highway 5 team had more than 300 people working 24 hours a day including stakeholders such as government parties, 
-                    vendors, and suppliers who came together to complete the project in the 5-week deadline, strengthening the existing relationships within the construction 
+                  <p class="muted">Thanks to Schimpf's project management focus and Weicker's engineering background,
+                    together they were able to stay on site and face
+                    problems that arose head on. The highway 5 team had more than 300 people working 24 hours a day
+                    including stakeholders such as government parties,
+                    vendors, and suppliers who came together to complete the project in the 5-week deadline,
+                    strengthening the existing relationships within the construction
                     industry.</p>
-                  <div class="three-col"style="justify-items:center; max-width:760px; margin:0 auto;">
+                  <div class="three-col" style="justify-items:center; max-width:760px; margin:0 auto;">
                     <div class="stat">
                       <div style="font-weight:800;font-size:1.6rem;color:var(--quaternary)">300 people </div>
                       <div class="small muted">and 200 pieces of equipment<br>plus 24-hour a-day work</div>
@@ -668,14 +731,18 @@
                   <h4 style="margin:.25rem 0">Lessons Learned</h4>
                 </div>
                 <div style="padding-left:2.25rem">
-                  <p class="muted">Team Highway 5 was able to recognize, evaluate, and respond to the changing conditions inside and outside the project, responding 
-                    comprehensively to enhance their performance in repairing the vital highway. They realized the highway was the cornerstone of their project and worked as a 
+                  <p class="muted">Team Highway 5 was able to recognize, evaluate, and respond to the changing
+                    conditions inside and outside the project, responding
+                    comprehensively to enhance their performance in repairing the vital highway. They realized the
+                    highway was the cornerstone of their project and worked as a
                     team to make sure the project was completed on schedule.</p>
                 </div>
               </div>
               <div class="card" style="padding:1rem;background:color-mix(in oklab, var(--muted) 55%, white)">
-                <p style="text-align:center;font-weight:700"><strong>Key Takeaway</strong><br>They realized that fixing the highway was just one piece of the entire system 
-                  that would open up the <br>Port of Vancouver so that business could continue moving along as normal.</p>
+                <p style="text-align:center;font-weight:700"><strong>Key Takeaway</strong><br>They realized that fixing
+                  the highway was just one piece of the entire system
+                  that would open up the <br>Port of Vancouver so that business could continue moving along as normal.
+                </p>
               </div>
             </div>
           </article>
@@ -903,71 +970,71 @@
     window.addEventListener('resize', updateCurrentSection);
 
   </script>
-<script>
-  (function () {
-    const anchorGap = 16; // space under the sticky bar; tweak to taste
+  <script>
+    (function () {
+      const anchorGap = 16; // space under the sticky bar; tweak to taste
 
-    function readStickyH() {
-      const cssVar = parseInt(getComputedStyle(document.documentElement)
-                        .getPropertyValue('--stickyH')) || 0;
-      const stickyBar = document.getElementById('sticky-cta-bar');
-      return Math.max(cssVar, stickyBar ? stickyBar.offsetHeight : 0);
-    }
-
-    // Wait until scrolling is "idle" (no movement) before snapping
-    function waitForScrollIdle(cb, maxWait = 900) {
-      let lastY = window.scrollY;
-      let stillFrames = 0;
-      const start = performance.now();
-
-      function tick() {
-        const y = window.scrollY;
-        if (Math.abs(y - lastY) < 0.5) {
-          stillFrames++;
-        } else {
-          stillFrames = 0;
-        }
-        lastY = y;
-
-        const timedOut = performance.now() - start > maxWait;
-        if (stillFrames >= 6 || timedOut) {
-          cb();
-        } else {
-          requestAnimationFrame(tick);
-        }
+      function readStickyH() {
+        const cssVar = parseInt(getComputedStyle(document.documentElement)
+          .getPropertyValue('--stickyH')) || 0;
+        const stickyBar = document.getElementById('sticky-cta-bar');
+        return Math.max(cssVar, stickyBar ? stickyBar.offsetHeight : 0);
       }
-      requestAnimationFrame(tick);
-    }
 
-    document.addEventListener('click', function (e) {
-      const a = e.target.closest('a[href^="#"]');
-      if (!a) return;
+      // Wait until scrolling is "idle" (no movement) before snapping
+      function waitForScrollIdle(cb, maxWait = 900) {
+        let lastY = window.scrollY;
+        let stillFrames = 0;
+        const start = performance.now();
 
-      const id = a.getAttribute('href').slice(1);
-      if (!id) return;
+        function tick() {
+          const y = window.scrollY;
+          if (Math.abs(y - lastY) < 0.5) {
+            stillFrames++;
+          } else {
+            stillFrames = 0;
+          }
+          lastY = y;
 
-      const target = document.getElementById(id);
-      if (!target) return;
-
-      e.preventDefault();
-
-      // 1) Smooth scroll using current sticky height
-      const stickyH0 = readStickyH();
-      const y0 = target.getBoundingClientRect().top + window.scrollY - stickyH0 - anchorGap;
-      window.scrollTo({ top: Math.max(0, y0), behavior: 'smooth' });
-
-      // 2) After scroll settles, snap once if needed
-      waitForScrollIdle(() => {
-        const stickyH = readStickyH();
-        const delta = target.getBoundingClientRect().top - stickyH - anchorGap;
-        if (Math.abs(delta) > 1) {
-          // Single micro-correction; 'auto' prevents canceling any ongoing smooth animation
-          window.scrollBy({ top: delta, left: 0, behavior: 'auto' });
+          const timedOut = performance.now() - start > maxWait;
+          if (stillFrames >= 6 || timedOut) {
+            cb();
+          } else {
+            requestAnimationFrame(tick);
+          }
         }
+        requestAnimationFrame(tick);
+      }
+
+      document.addEventListener('click', function (e) {
+        const a = e.target.closest('a[href^="#"]');
+        if (!a) return;
+
+        const id = a.getAttribute('href').slice(1);
+        if (!id) return;
+
+        const target = document.getElementById(id);
+        if (!target) return;
+
+        e.preventDefault();
+
+        // 1) Smooth scroll using current sticky height
+        const stickyH0 = readStickyH();
+        const y0 = target.getBoundingClientRect().top + window.scrollY - stickyH0 - anchorGap;
+        window.scrollTo({ top: Math.max(0, y0), behavior: 'smooth' });
+
+        // 2) After scroll settles, snap once if needed
+        waitForScrollIdle(() => {
+          const stickyH = readStickyH();
+          const delta = target.getBoundingClientRect().top - stickyH - anchorGap;
+          if (Math.abs(delta) > 1) {
+            // Single micro-correction; 'auto' prevents canceling any ongoing smooth animation
+            window.scrollBy({ top: delta, left: 0, behavior: 'auto' });
+          }
+        });
       });
-    });
-  })();
-</script>
+    })();
+  </script>
 
 </body>
 
