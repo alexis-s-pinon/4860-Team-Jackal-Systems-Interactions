@@ -483,74 +483,6 @@
         color: var(--fg);
       }
     }
-
-    /* Mobile hamburger for CTA bars */
-    .cta-bar {
-      position: relative;
-    }
-
-    .cta-hamburger {
-      display: none;
-      align-items: center;
-      justify-content: center;
-      padding: .55rem .8rem;
-      border: 1px solid var(--border);
-      border-radius: .5rem;
-      background: white;
-      font-weight: 700;
-    }
-
-    /* menu panel when open on mobile */
-    .cta-bar .btns,
-    #sticky-cta-bar .btns {
-      transition: transform .18s ease, opacity .18s ease;
-    }
-
-    @media (max-width: 640px) {
-
-      /* show hamburger, hide buttons by default */
-      .cta-hamburger {
-        display: inline-flex;
-      }
-
-      .cta-bar .btns,
-      #sticky-cta-bar .btns {
-        position: absolute;
-        top: calc(100% + 8px);
-        left: 0;
-        right: 0;
-        background: rgba(255, 251, 245, .98);
-        border: 1px solid var(--border);
-        border-radius: .75rem;
-        box-shadow: var(--shadow);
-        padding: .55rem;
-        display: none;
-        transform: translateY(-4px);
-        opacity: 0;
-        z-index: 70;
-      }
-
-      .cta-bar .btns.open,
-      #sticky-cta-bar .btns.open {
-        display: grid;
-        gap: .5rem;
-        grid-auto-rows: minmax(36px, auto);
-        transform: translateY(0);
-        opacity: 1;
-      }
-
-      /* make the sticky bar’s container relative so its dropdown is anchored */
-      #sticky-cta-bar .container {
-        position: relative;
-      }
-
-      /* ensure buttons in the dropdown are full-width-friendly */
-      #sticky-cta-bar .btns a,
-      .cta-bar .btns a {
-        width: 100%;
-        justify-content: center;
-      }
-    }
   </style>
 </head>
 
@@ -590,29 +522,27 @@
       </center>
       </p>
       <div class="btns" id="cta-row">
-        <button class="cta-hamburger" aria-expanded="false" aria-controls="cta-menu" aria-label="Open menu">☰</button>
-        <div class="btns" id="cta-menu">
-          <a class="btn primary" href="#concept">Understanding the Concept</a>
-          <a class="btn secondary" href="#application">Practical Application</a>
-          <a class="btn accent" href="#framework">Explore the Framework</a>
-          <a class="btn quaternary home-link" href="#top" style="display:none">Home</a>
+        <a class="btn primary" href="#concept">Understanding the Concept</a>
+        <a class="btn secondary" href="#application">Practical Application</a>
+        <a class="btn accent" href="#framework">Explore the Framework</a>
+        <a class="btn quaternary home-link" href="#top" style="display:none">Home</a>
 
-        </div>
       </div>
-      <br>
-      <!-- PMI Definition -->
-      <div class="container" style="margin-top:1rem">
-        <article class="card">
-          <div class="row">
-            <h3 style="margin:.25rem 0 0 0">PMI Principle: Recognize, evaluate, and respond to system interactions</h3>
-          </div>
-          <div class="muted">
-            <p>Acknowledge that projects are part of larger systems and are influenced by both internal and external
-              factors. Constantly evaluate how project elements
-              interact with each other and with external systems to optimize performance.</p>
-          </div>
-        </article>
-      </div><br>
+    </div>
+    <br>
+    <!-- PMI Definition -->
+    <div class="container" style="margin-top:1rem">
+      <article class="card">
+        <div class="row">
+          <h3 style="margin:.25rem 0 0 0">PMI Principle: Recognize, evaluate, and respond to system interactions</h3>
+        </div>
+        <div class="muted">
+          <p>Acknowledge that projects are part of larger systems and are influenced by both internal and external
+            factors. Constantly evaluate how project elements
+            interact with each other and with external systems to optimize performance.</p>
+        </div>
+      </article>
+    </div><br>
   </section>
 
   <!-- Scrollytelling Stage -->
@@ -715,8 +645,7 @@
                 <p class="muted" style="margin-left: 2rem;">The result of Dyson’s systems thinking was a quick rise to
                   being a leader in innovative appliances, with technology like the Dual-Cyclone vacuum.
                   <br>Additionally, Dyson has become a household name and gains billions of dollars in revenue each year
-                  from the company's wide variety of innovative products.
-                </p>
+                  from the company's wide variety of innovative products.</p>
                 <center><a
                     href=https://www.intelligencenode.com/blog/dyson-ai-dtc-success-story-on-digital-channels /><img
                     src="img/dyson-products.jpg" width="600px" height=auto></a></center>
@@ -915,28 +844,6 @@
     drawer?.querySelectorAll('a').forEach(a => a.addEventListener('click', () => { drawer.classList.remove('open'); toggle.setAttribute('aria-expanded', 'false'); }));
 
 
-    // === Mobile hamburger helper (place above sticky-bar logic) ===
-    function wireHamburger(container) {
-      if (!container) return;
-      const ham = container.querySelector('.cta-hamburger');
-      const menu = container.querySelector('.btns');
-      if (!ham || !menu) return;
-
-      ham.addEventListener('click', () => {
-        const open = menu.classList.toggle('open');
-        ham.setAttribute('aria-expanded', String(open));
-      });
-
-      menu.querySelectorAll('a').forEach(a => {
-        a.addEventListener('click', () => {
-          menu.classList.remove('open');
-          ham.setAttribute('aria-expanded', 'false');
-        });
-      });
-    }
-
-    // Wire the HERO bar immediately (works because this script is at the end of <body>)
-    wireHamburger(document.getElementById('cta-row'));
 
 
     // Sticky CTA bar (full-width) logic
@@ -947,15 +854,6 @@
       stickyBar.id = 'sticky-cta-bar';
       const inner = document.createElement('div');
       inner.className = 'container';
-
-      // ADD: hamburger button for the sticky bar
-      const ham = document.createElement('button');
-      ham.className = 'cta-hamburger';
-      ham.setAttribute('aria-expanded', 'false');
-      ham.setAttribute('aria-controls', 'sticky-cta-menu');
-      ham.setAttribute('aria-label', 'Open menu');
-      ham.textContent = '☰';
-
       const btns = document.createElement('div');
       btns.className = 'btns';
 
@@ -964,7 +862,7 @@
       let homeClone = null;
       let accentClone = null;
       if (ctaRow) {
-        ctaRow.querySelectorAll('.btns a').forEach((a) => {
+        ctaRow.querySelectorAll('a').forEach((a) => {
           const b = a.cloneNode(true);
           b.style.display = ''; // remove inline display style if any
           if (b.classList.contains('home-link')) {
@@ -1137,31 +1035,6 @@
       });
     })();
   </script>
-  <script>
-    function wireHamburger(container) {
-      if (!container) return;
-      const ham = container.querySelector('.cta-hamburger');
-      const menu = container.querySelector('.btns');
-      if (!ham || !menu) return;
-
-      ham.addEventListener('click', () => {
-        const open = menu.classList.toggle('open');
-        ham.setAttribute('aria-expanded', String(open));
-      });
-
-      // close menu when a link is clicked
-      menu.querySelectorAll('a').forEach(a => {
-        a.addEventListener('click', () => {
-          menu.classList.remove('open');
-          ham.setAttribute('aria-expanded', 'false');
-        });
-      });
-    }
-
-    // wire up the hero bar immediately
-    wireHamburger(document.getElementById('cta-row'));
-  </script>
-
 
 </body>
 
