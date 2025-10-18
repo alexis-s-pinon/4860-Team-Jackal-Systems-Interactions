@@ -483,6 +483,166 @@
         color: var(--fg);
       }
     }
+
+    /* === Two Truths & a Lie (Truth vs. Lie sorter) === */
+    .ttal {
+      margin-top: 1rem;
+    }
+
+    .ttal .zones {
+      display: grid;
+      gap: 1rem;
+      grid-template-columns: 1fr;
+    }
+
+    @media (min-width:768px) {
+      .ttal .zones {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    .ttal .zone {
+      border: 2px dashed var(--border);
+      border-radius: 1rem;
+      min-height: 140px;
+      padding: 1rem;
+      background: color-mix(in oklab, var(--muted) 65%, transparent);
+      display: grid;
+      grid-auto-rows: minmax(44px, auto);
+      gap: .5rem;
+      align-content: start;
+      transition: border-color .15s ease, background .15s ease;
+    }
+
+    .ttal .zone:hover {
+      border-color: color-mix(in oklab, var(--primary) 40%, var(--border));
+    }
+
+    .ttal .zone h3 {
+      margin: .25rem 0 .5rem 0;
+      font-size: 1.05rem;
+    }
+
+    .ttal .helper {
+      font-size: .85rem;
+      opacity: .75;
+    }
+
+    .ttal .pool {
+      display: grid;
+      gap: .5rem;
+      grid-template-columns: 1fr;
+    }
+
+    @media (min-width:768px) {
+      .ttal .pool {
+        grid-template-columns: 1fr 1fr 1fr;
+      }
+    }
+
+    .ttal .cardlet {
+      border: 1px solid var(--border);
+      border-radius: .75rem;
+      padding: .75rem;
+      background: #fff;
+      cursor: grab;
+      user-select: none;
+      transition: box-shadow .15s ease, transform .1s ease;
+      white-space: pre-wrap;
+      position: relative;
+    }
+
+    .ttal .cardlet:active {
+      cursor: grabbing;
+      transform: scale(.99);
+    }
+
+    .ttal .cardlet.dragging {
+      opacity: .85;
+      box-shadow: var(--shadow);
+    }
+
+    .ttal .zone.drop-ok {
+      background: color-mix(in oklab, var(--primary) 12%, white);
+    }
+
+    .ttal .zone.shake {
+      animation: ttal-shake .3s linear 1;
+    }
+
+    @keyframes ttal-shake {
+
+      0%,
+      100% {
+        transform: translateX(0)
+      }
+
+      25% {
+        transform: translateX(-3px)
+      }
+
+      75% {
+        transform: translateX(3px)
+      }
+    }
+
+    .ttal .controls {
+      display: flex;
+      gap: .5rem;
+      flex-wrap: wrap;
+      margin-top: .75rem;
+    }
+
+    .ttal .controls .spacer {
+      flex: 1 1 auto;
+    }
+
+    .ttal .badge {
+      display: inline-grid;
+      place-items: center;
+      border-radius: .5rem;
+      padding: .15rem .5rem;
+      font-size: .82rem;
+      font-weight: 700;
+    }
+
+    .ttal .cardlet .mark {
+      position: absolute;
+      top: 6px;
+      right: 8px;
+      font-weight: 800;
+      font-size: .9rem;
+      padding: .05rem .35rem;
+      border-radius: .35rem;
+      background: #fff;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, .06);
+    }
+
+    /* Reveal states */
+    .ttal.reveal .zone.truth .cardlet[data-lie="0"] {
+      border-color: var(--accent);
+      background: color-mix(in oklab, var(--accent) 10%, #fff);
+    }
+
+    .ttal.reveal .zone.lie .cardlet[data-lie="1"] {
+      border-color: var(--accent);
+      background: color-mix(in oklab, var(--accent) 10%, #fff);
+    }
+
+    .ttal.reveal .zone.truth .cardlet[data-lie="1"],
+    .ttal.reveal .zone.lie .cardlet[data-lie="0"] {
+      border-color: color-mix(in oklab, var(--quaternary, #64748B) 55%, transparent);
+      background: color-mix(in oklab, var(--quaternary, #64748B) 10%, #fff);
+    }
+
+    .ttal .finale {
+      margin-top: 1rem;
+      border: 1px solid var(--border);
+      border-radius: 1rem;
+      padding: 1.25rem;
+      background: #fff;
+      text-align: center;
+    }
   </style>
 </head>
 
@@ -645,7 +805,8 @@
                 <p class="muted" style="margin-left: 2rem;">The result of Dyson’s systems thinking was a quick rise to
                   being a leader in innovative appliances, with technology like the Dual-Cyclone vacuum.
                   <br>Additionally, Dyson has become a household name and gains billions of dollars in revenue each year
-                  from the company's wide variety of innovative products.</p>
+                  from the company's wide variety of innovative products.
+                </p>
                 <center><a
                     href=https://www.intelligencenode.com/blog/dyson-ai-dtc-success-story-on-digital-channels /><img
                     src="img/dyson-products.jpg" width="600px" height=auto></a></center>
@@ -772,6 +933,7 @@
             </div>
           </section>
 
+
           <section id="view-internal" class="three-col" role="tabpanel" hidden>
             <article class="card">
               <h4>Visual Representation</h4>
@@ -787,19 +949,82 @@
             </article>
           </section>
 
-          <section id="view-external" class="three-col" role="tabpanel" hidden>
-            <article class="card">
-              <h4>Interactive Element</h4>
-              <p class="muted">[Description]</p>
-            </article>
-            <article class="card">
-              <h4>Interactive Element</h4>
-              <p class="muted">[Description]</p>
-            </article>
-            <article class="card">
-              <h4>Interactive Element</h4>
-              <p class="muted">[Description]</p>
-            </article>
+
+
+          <!-- === Interactive Challenge: Two Truths & a Lie === -->
+          <section id="ttal" class="card ttal" aria-label="Truth vs. Lie Challenge">
+            <div style="text-align:center;margin:16px 0">
+              <!--span class="eyebrow accent">Interactive Challenge</span-->
+              <h2 class="section-title accent" style="margin:16px 0">Two Truths &amp; a Lie</h2>
+              <p class="small muted">Drag each statement into the <strong>Truth</strong> or <strong>Lie</strong> box.
+              </p>
+            </div>
+
+            <!-- Top: Drop zones -->
+            <div class="zones">
+              <div class="zone truth" data-bucket="truth" aria-label="Truth drop zone">
+                <h3>Truth</h3>
+                <div class="helper small muted">Place <strong>two</strong> statements here</div>
+              </div>
+              <div class="zone lie" data-bucket="lie" aria-label="Lie drop zone">
+                <h3>Lie</h3>
+                <div class="helper small muted">Place <strong>one</strong> statement here</div>
+              </div>
+            </div>
+
+            <!-- Bottom: Draggable choices -->
+            <div style="margin-top:1rem">
+              <div class="pool" id="ttal-pool" aria-label="Choices"></div>
+            </div>
+
+            <!-- Controls -->
+            <div class="controls">
+              <div class="badge small muted" id="ttal-round">Round 1 / 3</div>
+              <div class="spacer"></div>
+              <button type="button" class="btn" id="ttal-reset">Reset</button>
+              <button type="button" class="btn primary" id="ttal-submit" disabled>Submit</button>
+              <button type="button" class="btn accent" id="ttal-next" style="display:none">Next round</button>
+            </div>
+
+            <!-- Finale (hidden until you finish) -->
+            <div id="ttal-finale" class="finale" style="display:none">
+              <h3 style="margin:.25rem 0 0 0">All rounds complete!</h3>
+              <!p class="small muted">Nice work</p>
+                <button type="button" class="btn primary" id="ttal-replay">Play again?</button>
+            </div>
+
+            <!-- Data: your exact statements. Keep [FALSE] exactly as-is; it’s used internally. -->
+            <script type="application/json" id="ttal-data">
+  {
+    "rounds": [
+      {
+        "id": "q1",
+        "statements": [
+          "System interactions in project management is viewing the sum of parts and understanding how they all fit together.",
+          "[FALSE] Effective project managers do not need to take in account system interactions to lead a successful project.",
+          "System interactions include internal choices like scope and resources, as well as external forces like users and partners."
+        ]
+      },
+      {
+        "id": "q2",
+        "statements": [
+          "Sir James Dyson used system thinking to bring new innovative technology to the market.",
+          "Dyson used aerodynamics as a source of inspiration for his innovations.",
+          "[FALSE] Dyson wanted to improve on the already effective designs available in the market."
+        ]
+      },
+      {
+        "id": "q3",
+        "statements": [
+          "[FALSE] A project was started by the province of British Columbia, Canada to strengthen roads in anticipation for floods.",
+          "The team utilized a modified project life cycle and had a flexible stance to address unexpected situations.",
+          "As a result of this stance, and understanding the big picture, the team was able to complete the project within the 5 week deadline."
+        ]
+      }
+    ]
+  }
+  </script>
+
           </section>
 
         </div>
@@ -1035,6 +1260,171 @@
       });
     })();
   </script>
+  <script>
+    // === TTAL runtime (drag & drop + correctness + finale) ===
+    (function () {
+      const el = document.getElementById('ttal');
+      if (!el) return;
+
+      const pool = el.querySelector('#ttal-pool');
+      const truthZone = el.querySelector('.zone.truth');
+      const lieZone = el.querySelector('.zone.lie');
+      const btnSubmit = el.querySelector('#ttal-submit');
+      const btnReset = el.querySelector('#ttal-reset');
+      const btnNext = el.querySelector('#ttal-next');
+      const roundBadge = el.querySelector('#ttal-round');
+      const finaleBox = el.querySelector('#ttal-finale');
+
+      const dataTag = el.querySelector('#ttal-data');
+      const rounds = dataTag ? (JSON.parse(dataTag.textContent).rounds || []) : [];
+      let roundIndex = 0;
+      let dragging = null;
+
+      function shuffle(arr) {
+        for (let i = arr.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [arr[i], arr[j]] = [arr[j], arr[i]];
+        }
+        return arr;
+      }
+      function parseStatements(list) {
+        return list.map((raw, idx) => {
+          const isLie = raw.trim().startsWith('[FALSE]');
+          const text = isLie ? raw.replace(/^\[FALSE\]\s*/, '') : raw;
+          return { id: `s-${roundIndex}-${idx}-${Math.random().toString(36).slice(2)}`, text, isLie };
+        });
+      }
+      function clearAllCards() {
+        el.querySelectorAll('.cardlet').forEach(n => n.remove());
+      }
+      function updateSubmitState() {
+        const t = truthZone.querySelectorAll('.cardlet').length;
+        const l = lieZone.querySelectorAll('.cardlet').length;
+        btnSubmit.disabled = !(t === 2 && l === 1);
+      }
+      function buildCard(item) {
+        const d = document.createElement('div');
+        d.className = 'cardlet';
+        d.draggable = true;
+        d.textContent = item.text;
+        d.dataset.lie = item.isLie ? '1' : '0';
+        d.addEventListener('dragstart', (ev) => {
+          dragging = d;
+          d.classList.add('dragging');
+          try { ev.dataTransfer.setData('text/plain', 'drag'); } catch { }
+        });
+        d.addEventListener('dragend', () => {
+          dragging = null;
+          d.classList.remove('dragging');
+        });
+        return d;
+      }
+      function canAccept(zone) {
+        const cap = (zone === truthZone) ? 2 : 1;
+        const count = zone.querySelectorAll('.cardlet').length;
+        return count < cap;
+      }
+      function wireZone(zone) {
+        zone.addEventListener('dragover', (ev) => {
+          if (!dragging) return;
+          if (canAccept(zone)) { ev.preventDefault(); zone.classList.add('drop-ok'); }
+        });
+        zone.addEventListener('dragleave', () => zone.classList.remove('drop-ok'));
+        zone.addEventListener('drop', (ev) => {
+          ev.preventDefault();
+          zone.classList.remove('drop-ok');
+          if (!dragging) return;
+          if (canAccept(zone)) {
+            zone.appendChild(dragging);
+            updateSubmitState();
+          } else {
+            zone.classList.add('shake'); setTimeout(() => zone.classList.remove('shake'), 250);
+          }
+        });
+      }
+      function wirePool() {
+        pool.addEventListener('dragover', (ev) => { if (dragging) ev.preventDefault(); });
+        pool.addEventListener('drop', (ev) => {
+          ev.preventDefault();
+          if (dragging) { pool.appendChild(dragging); updateSubmitState(); }
+        });
+      }
+      function resetRoundUI() {
+        el.classList.remove('reveal');
+        btnNext.style.display = 'none';
+        btnSubmit.disabled = true;
+        if (btnNext.textContent !== 'Next round') btnNext.textContent = 'Next round';
+        el.querySelectorAll('.cardlet').forEach(c => {
+          c.classList.remove('correct', 'incorrect');
+          const mark = c.querySelector('.mark'); if (mark) mark.remove();
+          c.style.outline = '';
+        });
+      }
+      function renderRound(i) {
+        resetRoundUI();
+        clearAllCards();
+        truthZone.innerHTML = '<h3>Truth</h3><div class="helper small muted">Place <strong>two</strong> statements here</div>';
+        lieZone.innerHTML = '<h3>Lie</h3><div class="helper small muted">Place <strong>one</strong> statement here</div>';
+        if (finaleBox) finaleBox.style.display = 'none';
+
+        const r = rounds[i % rounds.length];
+        const items = shuffle(parseStatements(r.statements.slice()));
+        items.forEach(it => pool.appendChild(buildCard(it)));
+        roundBadge.textContent = `Round ${i + 1} / ${rounds.length}`;
+        updateSubmitState();
+      }
+
+      btnReset.addEventListener('click', () => renderRound(roundIndex));
+
+      btnSubmit.addEventListener('click', () => {
+        el.classList.add('reveal');
+        const mark = (card, ok) => {
+          card.classList.add(ok ? 'correct' : 'incorrect');
+          const tag = document.createElement('span');
+          tag.className = 'mark';
+          tag.textContent = ok ? '✓' : '✗';
+          tag.style.color = ok ? 'var(--accent)' : 'var(--primary)';
+          card.appendChild(tag);
+        };
+        truthZone.querySelectorAll('.cardlet').forEach(c => mark(c, c.dataset.lie === '0'));
+        lieZone.querySelectorAll('.cardlet').forEach(c => mark(c, c.dataset.lie === '1'));
+
+        const total = rounds.length;
+        btnNext.textContent = (roundIndex === total - 1) ? 'Finish' : 'Next round';
+        btnNext.style.display = 'inline-flex';
+      });
+
+      btnNext.addEventListener('click', () => {
+        const total = rounds.length;
+        if (roundIndex >= total - 1) {
+          // Finale view
+          if (finaleBox) {
+            finaleBox.style.display = 'block';
+          }
+          btnNext.style.display = 'none';
+          btnSubmit.disabled = true;
+          roundBadge.textContent = `Completed ${total} / ${total}`;
+        } else {
+          roundIndex += 1;
+          renderRound(roundIndex);
+        }
+      });
+
+      if (finaleBox) {
+        const replay = el.querySelector('#ttal-replay');
+        if (replay) replay.addEventListener('click', () => {
+          finaleBox.style.display = 'none';
+          roundIndex = 0;
+          renderRound(roundIndex);
+        });
+      }
+
+      // Init
+      wireZone(truthZone); wireZone(lieZone); wirePool();
+      renderRound(roundIndex);
+    })();
+  </script>
+
 
 </body>
 
