@@ -643,6 +643,46 @@
       background: #fff;
       text-align: center;
     }
+
+    /* === Case Study: newspaper-style image float === */
+    .case-flow::after {
+      content: "";
+      display: table;
+      clear: both;
+    }
+
+    /* clearfix */
+
+    .float-figure {
+      float: right;
+      width: clamp(260px, 38%, 460px);
+      /* responsive width on desktop */
+      margin: 0 0 .75rem 1rem;
+      /* space below & to the left */
+      border: 1px solid var(--border);
+      border-radius: 1rem;
+      overflow: hidden;
+      background: #fff;
+    }
+
+    .float-figure img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    .float-figure figcaption {
+      padding: .5rem .75rem;
+    }
+
+    /* Stack on small screens */
+    @media (max-width: 959px) {
+      .float-figure {
+        float: none;
+        width: 100%;
+        margin: 0 0 .75rem 0;
+      }
+    }
   </style>
 </head>
 
@@ -801,17 +841,22 @@
                 </div>
               </div>
               <div>
-                <h4 style="margin:.25rem 0">Outcome</h4>
-                <p class="muted" style="margin-left: 2rem;">The result of Dyson’s systems thinking was a quick rise to
-                  being a leader in innovative appliances, with technology like the Dual-Cyclone vacuum.
-                  <br>Additionally, Dyson has become a household name and gains billions of dollars in revenue each year
-                  from the company's wide variety of innovative products.
-                </p>
-                <center><a
-                    href=https://www.intelligencenode.com/blog/dyson-ai-dtc-success-story-on-digital-channels /><img
-                    src="img/dyson-products.jpg" width="600px" height=auto></a></center>
-              </div>
-            </div>
+                <div class="case-flow">
+                  <figure class="float-figure">
+                    <a href=https://www.intelligencenode.com/blog/dyson-ai-dtc-success-story-on-digital-channels /><img src="img/dyson-products.jpg"
+                      alt="Aerial view of flood damage along the Coquihalla Highway in British Columbia" loading="lazy"></a>
+                    <!--figcaption class="small muted">Dyson's Products: Air Purifier, Hair Dryer, and Vacuum</figcaption-->
+                  </figure>
+                  <div>
+                    <h4 style="margin:.25rem 0">Outcome</h4>
+                    <p class="muted" style="margin-left: 2rem;">The result of Dyson’s systems thinking was a quick rise
+                      to
+                      being a leader in innovative appliances, with technology like the Dual-Cyclone vacuum.
+                      Additionally, Dyson has become a household name and gains billions of dollars in revenue each year
+                      from the company's wide variety of innovative products.
+                    </p>
+                  </div>
+                </div>
           </article>
 
           <article class="card" style="margin-top:1rem;background:color-mix(in oklab, var(--muted) 35%, white)">
@@ -821,7 +866,13 @@
                   href="https://www.pmi.org/business-solutions/case-studies/reconnecting-roads-after-massive-flooding">Case
                   Study: Reconnecting Roads After Massive Flooding</a></h3>
             </div>
-            <div style="display:grid;gap:1.25rem">
+            <!--div style="display:grid;gap:1.25rem"-->
+            <div class="case-flow">
+              <figure class="float-figure">
+                <img src="img/bc-canada-highway.png"
+                  alt="Aerial view of flood damage along the Coquihalla Highway in British Columbia" loading="lazy">
+                <figcaption class="small muted">Coquihalla Highway, BC, Canada — Flood Aftermath</figcaption>
+              </figure>
               <div>
                 <div class="row">
                   <div class="icon-box"
