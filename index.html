@@ -716,7 +716,239 @@
         margin: 0 0 .75rem 0;
       }
     }
+
+
+    /* === Framework Gallery (namespaced & safe) === */
+    .fwGallery {
+      max-width: 960px;
+      margin: 1.25rem auto;
+    }
+
+    .fwGallery .fw-title {
+      margin: .25rem 0 .5rem 0;
+      font-size: 1.35rem
+    }
+
+    .fwGallery .fw-viewport {
+      position: relative;
+      border: 1px solid var(--border, #ddd);
+      border-radius: 1rem;
+      overflow: hidden;
+      background: #fff
+    }
+
+    .fwGallery .fw-track {
+      display: flex;
+      transition: transform .45s ease;
+      transform: translateX(0)
+    }
+
+    .fwGallery .fw-slide {
+      flex: 0 0 100%;
+      margin: 0;
+      display: grid;
+      grid-template-rows: 1fr auto;
+      min-height: 0
+    }
+
+    .fwGallery .fw-imgWrap {
+      aspect-ratio: 16/9;
+      display: grid;
+      place-items: center;
+      background: var(--muted, #f6f6f6)
+    }
+
+    .fwGallery img {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+      display: block
+    }
+
+    .fwGallery figcaption {
+      padding: .5rem .75rem
+    }
+
+    .fwGallery .fw-controls {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: .5rem;
+      margin-top: .5rem
+    }
+
+    .fwGallery .fw-arrow {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 36px;
+      height: 36px;
+      border: 1px solid var(--border, #ddd);
+      border-radius: .5rem;
+      background: #fff
+    }
+
+    .fwGallery .fw-arrow:disabled {
+      opacity: .4;
+      cursor: not-allowed
+    }
+
+    .fwGallery .fw-dots {
+      display: flex;
+      gap: 6px
+    }
+
+    .fwGallery .fw-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--border, #ddd)
+    }
+
+    .fwGallery .fw-dot[aria-current="true"] {
+      background: var(--primary, #2a9d8f)
+    }
+
+    .fwGallery .fw-blurb {
+      margin-top: .5rem
+    }
+
+    /* === Fit images to the carousel window === */
+
+    /* Choose the frame ratio once, gallery-wide */
+    .fwGallery {
+      --fw-ratio: 16/9;
+    }
+
+    /* try 4/3 or 3/2 if it feels taller/narrower on your page */
+
+    /* The visible image “window” */
+    .fwGallery .fw-imgWrap {
+      aspect-ratio: var(--fw-ratio);
+      width: 100%;
+      padding: 8px;
+      /* small breathing room around the image */
+      background: var(--muted, #f6f6f6);
+    }
+
+    /* Force each image to stay inside that window */
+    .fwGallery .fw-imgWrap img {
+      width: 100% !important;
+      height: 100% !important;
+      object-fit: contain;
+      /* show the whole image, no cropping */
+      display: block;
+    }
+
+    /* Optional: on small screens use a taller window so details stay readable */
+    @media (max-width: 640px) {
+      .fwGallery {
+        --fw-ratio: 4/3;
+      }
+    }
+
+    /* === Fit-to-image mode (auto-height per slide) === */
+    .fwGallery .fw-viewport {
+      height: auto;
+      /* JS will set height explicitly */
+      transition: height .35s ease;
+    }
+
+    .fwGallery .fw-slide {
+      display: grid;
+      grid-template-rows: auto auto;
+      /* image area + caption; no forced stretch */
+    }
+
+    .fwGallery .fw-imgWrap {
+      aspect-ratio: auto;
+      /* stop forcing a fixed ratio */
+      padding: 0;
+      /* optional: remove inner padding */
+      background: var(--muted, #f6f6f6);
+    }
+
+    .fwGallery .fw-imgWrap img {
+      width: 100% !important;
+      height: auto !important;
+      /* scale by width, keep native aspect */
+      object-fit: contain;
+      display: block;
+    }
+
+
+    /* === Compact mode for the Framework Gallery === */
+    .fwGallery.compact {
+      /* Tweak these to taste */
+      --fw-max-w: 820px;
+      /* was ~960px */
+      --fw-vh: 58vh;
+      /* max height of the image+caption area */
+    }
+
+    .fwGallery.compact {
+      max-width: min(var(--fw-max-w), 92vw);
+      margin: .75rem auto;
+    }
+
+    .fwGallery.compact .fw-title {
+      font-size: 1.15rem;
+      margin: .25rem 0 .35rem;
+    }
+
+    .fwGallery.compact .fw-viewport {
+      border-radius: .75rem;
+      max-height: var(--fw-vh);
+      transition: height .35s ease;
+    }
+
+    .fwGallery.compact .fw-controls {
+      margin-top: .35rem;
+    }
+
+    .fwGallery.compact .fw-arrow {
+      width: 32px;
+      height: 32px;
+    }
+
+    .fwGallery.compact .fw-dot {
+      width: 7px;
+      height: 7px;
+    }
+
+    .fwGallery.compact figcaption,
+    .fwGallery.compact .fw-blurb {
+      font-size: .95rem;
+    }
+
+    .fwGallery.compact .fw-blurb {
+      margin-top: .35rem;
+    }
+
+    /* Make the image always fit inside the capped viewport */
+    .fwGallery.compact .fw-imgWrap {
+      /* no fixed aspect; let JS/height cap control it */
+      aspect-ratio: auto;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--muted, #f6f6f6);
+      padding: 0;
+      height: 100%;
+    }
+
+    .fwGallery.compact .fw-imgWrap img {
+      max-width: 100%;
+      max-height: 100%;
+      width: auto;
+      /* scale by height if needed */
+      height: auto;
+      object-fit: contain;
+      display: block;
+    }
   </style>
+
+
 </head>
 
 <body>
@@ -731,7 +963,7 @@
       <nav class="desktop-nav" aria-label="Primary">
         <a href="#concept">Understanding the Concept</a>
         <a href="#application">Practical Application</a>
-        <a href="#framework">Explore the Framework</a>
+        <a href="#framework">Visualize the Framework</a>
       </nav>
       <button class="mobile-toggle" id="mobile-toggle" aria-expanded="false" aria-controls="mobile-drawer">☰</button>
     </div>
@@ -740,7 +972,7 @@
         <div style="display:grid;gap:.5rem">
           <a href="#concept" class="underline">Understanding the Concept</a>
           <a href="#application" class="underline">Practical Application</a>
-          <a href="#framework" class="underline">Explore the Framework</a>
+          <a href="#framework" class="underline">Visualize the Framework</a>
         </div>
       </div>
     </div>
@@ -757,7 +989,7 @@
       <div class="btns" id="cta-row">
         <a class="btn primary" href="#concept">Understanding the Concept</a>
         <a class="btn secondary" href="#application">Practical Application</a>
-        <a class="btn accent" href="#framework">Explore the Framework</a>
+        <a class="btn accent" href="#framework">Visualize the Framework</a>
         <a class="btn quaternary home-link" href="#top" style="display:none">Home</a>
 
       </div>
@@ -784,7 +1016,6 @@
     <section id="concept" class="section is-current"><br>
       <div class="panel">
         <div class="container panel-inner fadeable">
-
 
           <div style="text-align:center;margin:16px 0">
             <h2 class="section-title primary">Understanding the Concept</h2>
@@ -832,7 +1063,9 @@
                     He mainly focuses on working with customer and technical system information.</p>
                 </div>
                 <div style="display:flex;justify-content:left;margin:1rem 0">
-                  <a class="btn primary" href="https://drive.google.com/file/d/1ZIaQEv6GPTbyUZjMyOXOG9CNL-1VjuSw/preview" target="_blank" rel="noopener">
+                  <a class="btn primary"
+                    href="https://drive.google.com/file/d/1ZIaQEv6GPTbyUZjMyOXOG9CNL-1VjuSw/preview" target="_blank"
+                    rel="noopener">
                     Click Here to Watch the Full Interview
                   </a>
                 </div>
@@ -859,8 +1092,6 @@
                     will affect a lot of other people and it will make a difference.</em></p>
               </blockquote>
           </article>
-          <!--center><iframe src="https://drive.google.com/file/d/1ZIaQEv6GPTbyUZjMyOXOG9CNL-1VjuSw/preview" width="640"
-              height="480" allow="autoplay"></iframe></center-->
         </div>
       </div>
     </section>
@@ -1015,7 +1246,7 @@
                 <figure class="float-figure">
                   <img src="img/fixed-highway.png"
                     alt="Aerial view of flood damage along the Coquihalla Highway in British Columbia" loading="lazy">
-                  <figcaption class="small muted">Coquihalla Highway, BC, Canada — Flood Aftermath</figcaption>
+                  <figcaption class="small muted">Coquihalla Highway, BC, Canada — Highway Repaired</figcaption>
                 </figure>
                 <div class="row">
                   <div class="icon-box"
@@ -1048,39 +1279,46 @@
       <div class="panel">
         <div class="container panel-inner fadeable">
           <div style="text-align:center;margin:16px 0">
-            <h2 class="section-title accent">Explore the Framework</h2>
+            <h2 class="section-title accent">Visualize the Framework</h2>
           </div>
-
-          <section id="view-overview" role="tabpanel" aria-labelledby="tab-overview">
-            <div style="display:grid;gap:1rem;place-items:center;max-width:800px;margin:0 auto">
-              <!--div
-                style="height:80px;width:80px;border-radius:999px;background:var(--primary);display:grid;place-items:center;color:white;font-size:2rem">
-                👁</div>
-              <h3>Systems Overview</h3>
-              <p class="muted">[High-level explanation of your visual representation - what it shows, why it matters]
-              </p-->
-              <div
-                style="border:2px dashed var(--border);border-radius:1rem;display:grid;place-items:center;min-height:240px;background:color-mix(in oklab, var(--muted) 70%, transparent)">
-                [Your diagram, chart, or visual goes here]</div>
+          <!-- === Visualize the Framework: Visuals Carousel === -->
+          <section id="fw-gallery" class="fwGallery" aria-label="Framework gallery">
+            <h3 class="fw-title" aria-live="polite">Systems Thinking Overview</h3>
+            <div class="fw-viewport" tabindex="0">
+              <div class="fw-track">
+                <figure class="fw-slide" data-title="Systems Thinking"
+                  data-blurb="How project elements interact with each other and external systems.">
+                  <div class="fw-imgWrap">
+                    <img src="img/sys-thinking-visual.jpeg" alt="Systems Thinking overview infographic">
+                  </div>
+                  <figcaption class="small muted">Key relationships and why they matter.</figcaption>
+                </figure>
+                <figure class="fw-slide" data-title="How to Use Systems"
+                  data-blurb="Practical moves: scan for patterns, zoom in/out, take small reversible steps, and favor foresight.">
+                  <div class="fw-imgWrap">
+                    <img src="img/how-to-use-systems-visual.jpeg"
+                      alt="How to use systems thinking in business infographic">
+                  </div>
+                  <figcaption class="small muted">Ways to apply systems thinking.</figcaption>
+                </figure>
+                <figure class="fw-slide" data-title="Five Core Disciplines"
+                  data-blurb="Senge’s model at a glance: Personal Mastery, Mental Models, Shared Vision, Team Learning, centered on Systems Thinking.">
+                  <div class="fw-imgWrap">
+                    <img src="img/five-core-disciplines-visual.jpeg"
+                      alt="Systems thinking five core disciplines infographic">
+                  </div>
+                  <figcaption class="small muted">The 5 disciplines that support system-level work.</figcaption>
+                </figure>
+              </div>
             </div>
+            <div class="fw-controls">
+              <button type="button" class="fw-arrow" data-prev aria-label="Previous">‹</button>
+              <div class="fw-dots" aria-label="Slide navigation"></div>
+              <button type="button" class="fw-arrow" data-next aria-label="Next">›</button>
+            </div>
+            <!--p class="fw-blurb small muted">How project elements interact with each other and external systems —
+              relationships that drive outcomes.</p-->
           </section>
-
-
-          <section id="view-internal" class="three-col" role="tabpanel" hidden>
-            <article class="card">
-              <h4>Visual Representation</h4>
-              <p class="muted">[Description]</p>
-            </article>
-            <article class="card">
-              <h4>Visual Representation</h4>
-              <p class="muted">[Description]</p>
-            </article>
-            <article class="card">
-              <h4>Visual Representation</h4>
-              <p class="muted">[Description]</p>
-            </article>
-          </section>
-
 
 
           <!-- === Interactive Challenge: Two Truths & a Lie === -->
@@ -1174,7 +1412,7 @@
         <nav class="small" aria-label="Footer"><br><br>
           <a class="underline" href="#concept">Understanding the Concept</a><br />
           <a class="underline" href="#application">Practical Application</a><br />
-          <a class="underline" href="#framework">Explore the Framework</a>
+          <a class="underline" href="#framework">Visualize the Framework</a>
         </nav>
         <div class="small muted">
           <p><!--span id="year"></span--><br>Ryan Hwang<br>Alejandro Diaz<br>Jeremy Yan<br>Juan Talome<br>Alexis Pinon
@@ -1290,7 +1528,7 @@
 
     // ===== Scrollytelling fade logic (distance-to-header) =====
     const sections = Array.from(document.querySelectorAll('.section'));
-    const switchOffset = 140; // px — increase to switch later, decrease to switch sooner
+    const switchOffset = 500; // px — increase to switch later, decrease to switch sooner
     function updateCurrentSection() {
       const stickyH = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--stickyH')) || 0;
       let best = null;
@@ -1553,6 +1791,138 @@
       // Init
       wireZone(truthZone); wireZone(lieZone); wirePool();
       renderRound(roundIndex);
+    })();
+  </script>
+
+
+  <script>
+    (() => {
+      const root = document.querySelector('#fw-gallery');
+      if (!root) return;
+      const track = root.querySelector('.fw-track');
+      const slides = Array.from(root.querySelectorAll('.fw-slide'));
+      const prevBtn = root.querySelector('[data-prev]');
+      const nextBtn = root.querySelector('[data-next]');
+      const dotsBox = root.querySelector('.fw-dots');
+      const titleEl = root.querySelector('.fw-title');
+      const blurbEl = root.querySelector('.fw-blurb');
+      const viewport = root.querySelector('.fw-viewport');
+
+      dotsBox.innerHTML = slides.map((_, i) =>
+        `<button type="button" class="fw-dot" aria-label="Go to slide ${i + 1}"></button>`
+      ).join('');
+      const dots = Array.from(dotsBox.children);
+
+      let i = 0;
+      function update() {
+        track.style.transform = `translateX(-${i * 100}%)`;
+        titleEl.textContent = slides[i].dataset.title || '';
+        blurbEl.textContent = slides[i].dataset.blurb || '';
+        prevBtn.disabled = i === 0;
+        nextBtn.disabled = i === slides.length - 1;
+        dots.forEach((d, k) => d.setAttribute('aria-current', k === i ? 'true' : 'false'));
+      }
+      prevBtn.addEventListener('click', () => { if (i > 0) { i--; update(); } });
+      nextBtn.addEventListener('click', () => { if (i < slides.length - 1) { i++; update(); } });
+      dots.forEach((d, k) => d.addEventListener('click', () => { i = k; update(); }));
+
+      viewport.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowRight') nextBtn.click();
+        if (e.key === 'ArrowLeft') prevBtn.click();
+      });
+      let startX = null;
+      viewport.addEventListener('touchstart', (e) => { startX = e.touches[0].clientX; }, { passive: true });
+      viewport.addEventListener('touchend', (e) => {
+        if (startX == null) return;
+        const dx = e.changedTouches[0].clientX - startX;
+        if (Math.abs(dx) > 40) (dx < 0 ? nextBtn : prevBtn).click();
+        startX = null;
+      });
+
+      update();
+    })();
+  </script>
+  <script>
+    (() => {
+      const root = document.querySelector('#fw-gallery');
+      if (!root) return;
+
+      const track = root.querySelector('.fw-track');
+      const slides = Array.from(root.querySelectorAll('.fw-slide'));
+      const prevBtn = root.querySelector('[data-prev]');
+      const nextBtn = root.querySelector('[data-next]');
+      const dotsBox = root.querySelector('.fw-dots');
+      const titleEl = root.querySelector('.fw-title');
+      const blurbEl = root.querySelector('.fw-blurb');
+      const viewport = root.querySelector('.fw-viewport');
+
+      // build dots (unchanged)
+      dotsBox.innerHTML = slides.map((_, k) => `<button type="button" class="fw-dot" aria-label="Go to slide ${k + 1}"></button>`).join('');
+      const dots = Array.from(dotsBox.children);
+
+      let i = 0;
+
+      /* === NEW: size viewport to active slide's image === */
+      function sizeToActive() {
+        const fig = slides[i];
+        const img = fig.querySelector('img');
+        const cap = fig.querySelector('figcaption');
+
+        const measure = () => {
+          // compute height from image’s intrinsic ratio at current width
+          const w = viewport.clientWidth || img.clientWidth || 1;
+          let h;
+          if (img.naturalWidth && img.naturalHeight) {
+            h = img.naturalHeight * (w / img.naturalWidth);
+          } else {
+            // fallback if intrinsic size not ready yet
+            h = img.getBoundingClientRect().height || fig.querySelector('.fw-imgWrap').getBoundingClientRect().height;
+          }
+          const capH = cap ? cap.getBoundingClientRect().height : 0;
+          viewport.style.height = Math.ceil(h + capH) + 'px';
+        };
+
+        if (!img.complete) {
+          img.addEventListener('load', measure, { once: true });
+        } else {
+          // let layout settle before measuring
+          requestAnimationFrame(measure);
+        }
+      }
+
+      function update() {
+        track.style.transform = `translateX(-${i * 100}%)`;
+        titleEl.textContent = slides[i].dataset.title || '';
+        blurbEl.textContent = slides[i].dataset.blurb || '';
+        prevBtn.disabled = i === 0;
+        nextBtn.disabled = i === slides.length - 1;
+        dots.forEach((d, k) => d.setAttribute('aria-current', k === i ? 'true' : 'false'));
+        sizeToActive();                 // ← call the new sizing helper
+      }
+
+      prevBtn.addEventListener('click', () => { if (i > 0) { i--; update(); } });
+      nextBtn.addEventListener('click', () => { if (i < slides.length - 1) { i++; update(); } });
+      dots.forEach((d, k) => d.addEventListener('click', () => { i = k; update(); }));
+
+      // keyboard & swipe (unchanged)
+      viewport.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowRight') nextBtn.click();
+        if (e.key === 'ArrowLeft') prevBtn.click();
+      });
+      let startX = null;
+      viewport.addEventListener('touchstart', (e) => { startX = e.touches[0].clientX; }, { passive: true });
+      viewport.addEventListener('touchend', (e) => {
+        if (startX == null) return;
+        const dx = e.changedTouches[0].clientX - startX;
+        if (Math.abs(dx) > 40) (dx < 0 ? nextBtn : prevBtn).click();
+        startX = null;
+      });
+
+      // Resize the window → re-fit current slide
+      window.addEventListener('resize', () => sizeToActive());
+
+      // initial render
+      update();
     })();
   </script>
 
